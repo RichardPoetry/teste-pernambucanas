@@ -4,6 +4,7 @@ import com.vestimentaseden.vestimentas_eden.model.cliente.TipoClienteEnum;
 import com.vestimentaseden.vestimentas_eden.model.cliente.mapper.ClienteMapper;
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
 import com.vestimentaseden.vestimentas_eden.model.pedido.CupomEnum;
+import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.mapper.PedidoMapper;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
@@ -45,7 +46,14 @@ public class PedidoService {
 
         List<ItemPedidoEntity> itemPedidoEntities = PedidoMapper.INSTANCE.toItemPedidoEntities(produtoVO,pedidoRequest.getItens());
 
-        PedidoEntity pedido = PedidoMapper.INSTANCE.toPedidoEntity(pedidoRequest,clienteEntity,itemPedidoEntities,subtotal,frete,desconto,total);
+        PedidoEntity pedido = PedidoMapper.INSTANCE.toPedidoEntity(pedidoRequest,
+                                                                   clienteEntity,
+                                                                   itemPedidoEntities,
+                                                                   subtotal,
+                                                                   frete,
+                                                                   desconto,
+                                                                   StatusPedidoEnum.CRIADO,
+                                                                   total);
 
         itemPedidoEntities.forEach(item -> item.setPedido(pedido));
 
@@ -62,6 +70,21 @@ public class PedidoService {
         return PedidoMapper.INSTANCE.toPedidoResponse(pedido);
     }
 
+    public void pagarPedido(String id) {
+
+        PedidoEntity pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatus(StatusPedidoEnum.PAGO);
+
+       int pontosGerados = pedido.getTotal().intValue();
+
+       if(pedido.getCliente().getTipo() == TipoClienteEnum.PLUS) pedido.setPontosGerados(pontosGerados * 2);
+
+       pedido.setPontosGerados(pontosGerados * 2);
+
+       pedidoRepository.save(pedido);
+    }
 
     private BigDecimal calculoSubTotal(List<ItemRequest> itens, List<ProdutoVO> produtos) {
 
@@ -123,6 +146,4 @@ public class PedidoService {
 
         return total;
     }
-
-
 }

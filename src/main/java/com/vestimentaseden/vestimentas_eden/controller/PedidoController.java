@@ -33,4 +33,9 @@ public class PedidoController {
         return pedidoFacade.consultarPedido(id);
     }
 
+    @PostMapping("/pedido/{id}/pagamento")
+    public void pagarPedido (@PathVariable String id){
+
+         this.pedidoFacade.pagarPedido(id);
+    }
 }

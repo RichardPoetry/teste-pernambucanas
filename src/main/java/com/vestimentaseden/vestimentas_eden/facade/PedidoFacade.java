@@ -37,6 +37,10 @@ public class PedidoFacade {
     public PedidoResponse consultarPedido(String id) {
         return pedidoService.consultarPedido(id);
     }
+
+    public void pagarPedido(String id) {
+        this.pedidoService.pagarPedido(id);
+    }
 }
 
 

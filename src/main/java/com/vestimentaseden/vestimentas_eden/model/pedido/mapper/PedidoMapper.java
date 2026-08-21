@@ -1,5 +1,6 @@
 package com.vestimentaseden.vestimentas_eden.model.pedido.mapper;
 
+import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.response.ItemPedidoResponse;
@@ -37,6 +38,7 @@ public interface PedidoMapper {
                                 BigDecimal subtotal,
                                 BigDecimal frete,
                                 BigDecimal desconto,
+                                StatusPedidoEnum statusPedidoEnum,
                                 BigDecimal total);
 
     default List<ItemPedidoEntity> toItemPedidoEntities(List<ProdutoVO> produtos, List<ItemRequest> itens) {

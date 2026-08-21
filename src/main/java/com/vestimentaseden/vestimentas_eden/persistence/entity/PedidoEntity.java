@@ -1,6 +1,7 @@
 package com.vestimentaseden.vestimentas_eden.persistence.entity;
 
 import com.vestimentaseden.vestimentas_eden.model.pedido.CupomEnum;
+import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,8 +65,8 @@ public class PedidoEntity {
     @Enumerated(EnumType.STRING)
     private CupomEnum cupom;
 
-//    @Enumerated(EnumType.STRING)
-//    private StatusPedido status;
+    @Enumerated(EnumType.STRING)
+    private StatusPedidoEnum status;
 }
 
 

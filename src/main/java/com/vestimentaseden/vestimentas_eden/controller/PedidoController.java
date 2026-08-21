@@ -2,8 +2,11 @@ package com.vestimentaseden.vestimentas_eden.controller;
 
 import com.vestimentaseden.vestimentas_eden.facade.PedidoFacade;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
+import com.vestimentaseden.vestimentas_eden.model.pedido.response.PedidoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +20,17 @@ public class PedidoController {
     private final PedidoFacade pedidoFacade;
 
     @PostMapping("/pedido")
-    public void criarPedido (@RequestBody @Valid PedidoRequest pedidoRequest){
+    public PedidoResponse criarPedido (@RequestBody @Valid PedidoRequest pedidoRequest){
 
         System.out.println(pedidoRequest);
 
-        this.pedidoFacade.criarPedido(pedidoRequest);
+        return this.pedidoFacade.criarPedido(pedidoRequest);
+    }
+
+    @GetMapping("/pedidos/{id}")
+    public PedidoResponse consultarPedido (@PathVariable String id){
+
+        return pedidoFacade.consultarPedido(id);
     }
 
 }

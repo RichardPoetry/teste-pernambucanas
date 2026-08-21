@@ -2,6 +2,8 @@ package com.vestimentaseden.vestimentas_eden.model.pedido.mapper;
 
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
+import com.vestimentaseden.vestimentas_eden.model.pedido.response.ItemPedidoResponse;
+import com.vestimentaseden.vestimentas_eden.model.pedido.response.PedidoResponse;
 import com.vestimentaseden.vestimentas_eden.model.produto.vo.ProdutoVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ItemPedidoEntity;
@@ -66,5 +68,28 @@ public interface PedidoMapper {
         return entities;
     }
 
-//   default PedidoVO toPedidoVO(PedidoEntity pedido);
+
+
+    default PedidoResponse toPedidoResponse(PedidoEntity pedidoEntity){
+
+        List<ItemPedidoResponse> itemPedidoResponse = pedidoEntity.getItens().stream()
+                .map(item -> ItemPedidoResponse.builder()
+                        .id(item.getId())
+                        .produtoId(item.getProduto().getId())
+                        .quantidade(item.getQuantidade())
+                        .precoUnitario(item.getPrecoUnitario())
+                        .build())
+                .toList();
+
+
+        return PedidoResponse.builder()
+                .id(pedidoEntity.getId())
+                .nomeCliente(pedidoEntity.getCliente().getNome())
+                .itens(itemPedidoResponse)
+                .subtotal(pedidoEntity.getSubtotal())
+                .desconto(pedidoEntity.getDesconto())
+                .frete(pedidoEntity.getFrete())
+                .total(pedidoEntity.getTotal())
+                .build();
+    }
 }

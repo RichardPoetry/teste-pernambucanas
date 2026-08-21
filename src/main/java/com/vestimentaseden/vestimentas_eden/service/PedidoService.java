@@ -7,6 +7,7 @@ import com.vestimentaseden.vestimentas_eden.model.pedido.CupomEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.mapper.PedidoMapper;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
+import com.vestimentaseden.vestimentas_eden.model.pedido.response.PedidoResponse;
 import com.vestimentaseden.vestimentas_eden.model.produto.vo.ProdutoVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ItemPedidoEntity;
@@ -30,7 +31,7 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
 
-    public void criarPedido(PedidoRequest pedidoRequest, ClienteVO cliente,  List<ProdutoVO> produtoVO) {
+    public PedidoResponse criarPedido(PedidoRequest pedidoRequest, ClienteVO cliente,  List<ProdutoVO> produtoVO) {
 
         BigDecimal subtotal = calculoSubTotal(pedidoRequest.getItens(),produtoVO);
 
@@ -50,8 +51,15 @@ public class PedidoService {
 
         pedidoRepository.save(pedido);
 
-//        PedidoVO pedidoVO= PedidoMapper.INSTANCE.toPedidoVO(pedido);
+       return PedidoMapper.INSTANCE.toPedidoResponse(pedido);
+    }
 
+    public PedidoResponse consultarPedido(String id) {
+
+        PedidoEntity pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        return PedidoMapper.INSTANCE.toPedidoResponse(pedido);
     }
 
 
@@ -115,5 +123,6 @@ public class PedidoService {
 
         return total;
     }
+
 
 }

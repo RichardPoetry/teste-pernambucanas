@@ -76,19 +76,25 @@ public class PedidoService {
         PedidoEntity pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
-        if(pedido.getStatus() != StatusPedidoEnum.PAGO)
-            return;
-//        criar excessões para casos assims
-
         pedido.setStatus(StatusPedidoEnum.PAGO);
 
        int pontosGerados = pedido.getTotal().intValue();
 
        if(pedido.getCliente().getTipo() == TipoClienteEnum.PLUS) pedido.setPontosGerados(pontosGerados * 2);
 
-       pedido.setPontosGerados(pontosGerados * 2);
+       pedido.setPontosGerados(pontosGerados);
 
        pedidoRepository.save(pedido);
+    }
+
+    public void AtualizarStatusPedidoCancelado(String id) {
+
+        PedidoEntity pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatus(StatusPedidoEnum.CANCELADO);
+
+        pedidoRepository.save(pedido);
     }
 
     private BigDecimal calculoSubTotal(List<ItemRequest> itens, List<ProdutoVO> produtos) {
@@ -151,4 +157,6 @@ public class PedidoService {
 
         return total;
     }
+
+
 }

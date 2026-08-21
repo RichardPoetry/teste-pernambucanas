@@ -59,6 +59,7 @@ public class ProdutoService {
                             "Produto não encontrado: " + item.getProdutoId()));
 
             produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+            produtoRepository.save(produto);
         }
         System.out.println("produtos atualizados no estoque");
     }
@@ -73,6 +74,7 @@ public class ProdutoService {
                             "Produto não encontrado: " + item.getProdutoId()));
 
             produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+            produtoRepository.save(produto);
         }
         System.out.println("produtos devolvidos ao estoque");
     }

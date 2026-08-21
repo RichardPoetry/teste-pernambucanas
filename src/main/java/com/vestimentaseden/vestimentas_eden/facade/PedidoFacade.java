@@ -54,10 +54,13 @@ public class PedidoFacade {
 
         if(pedidoVO.getStatus() == StatusPedidoEnum.ENVIADO ||
            pedidoVO.getStatus() == StatusPedidoEnum.ENTREGUE) {
+            System.out.println("pedido não pode ser cancelado");
             return;
         }
 
         this.produtoService.atualizaEstoquePedidoCancelado(pedidoVO.getItens());
+
+        this.pedidoService.AtualizarStatusPedidoCancelado(id);
 
     }
 }

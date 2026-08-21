@@ -30,6 +30,7 @@ public interface PedidoMapper {
     @Mapping(target = "frete", source = "frete")
     @Mapping(target = "desconto", source = "desconto")
     @Mapping(target = "total", source = "total")
+    @Mapping(target = "status", source = "statusPedidoEnum" )
     @Mapping(target = "cupom", source = "pedidoRequest.cupom")
     @Mapping(target = "pontosGerados", ignore = true)
     PedidoEntity toPedidoEntity(PedidoRequest pedidoRequest,

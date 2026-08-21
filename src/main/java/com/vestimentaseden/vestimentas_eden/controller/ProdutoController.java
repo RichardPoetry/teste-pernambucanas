@@ -19,7 +19,7 @@ public class ProdutoController {
     @GetMapping("/produto")
     public List<ProdutoResponse> getProduto(){
 
-    List<ProdutoResponse> produtoRetornado = produtoService.trazerProduto();
+    List<ProdutoResponse> produtoRetornado = produtoService.trazerTodosProdutos();
 
     return produtoRetornado;
     }

@@ -1,3 +1,10 @@
 spring:
   application:
     name: vestimentas-eden
+
+
+  datasource:
+    url: ${BMS_DATABASE_URL:jdbc:postgresql://localhost:5432/stock_db}
+    username: ${BMS_DATABASE_USERNAME:stock_user}
+    password: ${BMS_DATABASE_PASSWORD:stock_password}
+    driver-class-name: org.postgresql.Driver

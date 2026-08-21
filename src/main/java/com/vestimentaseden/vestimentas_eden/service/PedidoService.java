@@ -58,7 +58,7 @@ public class PedidoService {
 
         itemPedidoEntities.forEach(item -> item.setPedido(pedido));
 
-        pedidoRepository.save(pedido);
+        this.pedidoRepository.save(pedido);
 
        return PedidoMapper.INSTANCE.toPedidoVO(pedido);
     }
@@ -116,7 +116,7 @@ public class PedidoService {
 
         if (subTotal.compareTo(VALOR_MINIMO_FRETE_GRATIS) >= 0
                 || CupomEnum.FRETEGRATIS.equals(cupom)) {
-            return BigDecimal.ZERO;
+            return BigDecimal.ZERO.setScale(2);
         }
 
         return FRETE;
@@ -124,7 +124,7 @@ public class PedidoService {
 
     private BigDecimal calculoDesconto(BigDecimal subTotal, ClienteVO cliente, CupomEnum cupom) {
 
-        BigDecimal percentual = BigDecimal.ZERO;
+        BigDecimal percentual = BigDecimal.ZERO.setScale(2);
 
         if (cliente.getTipo() == TipoClienteEnum.PLUS) {
             percentual = percentual.add(DESCONTO_CLIENTE_PLUS);

@@ -1,6 +1,6 @@
 package com.vestimentaseden.vestimentas_eden.service;
 
-import com.vestimentaseden.vestimentas_eden.model.cliente.mapper.ClienteMapper;
+import com.vestimentaseden.vestimentas_eden.model.mapper.ClienteMapper;
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;
 import com.vestimentaseden.vestimentas_eden.persistence.repository.ClienteRepository;

@@ -1,14 +1,15 @@
 package com.vestimentaseden.vestimentas_eden.service;
 
 import com.vestimentaseden.vestimentas_eden.model.cliente.TipoClienteEnum;
-import com.vestimentaseden.vestimentas_eden.model.cliente.mapper.ClienteMapper;
+import com.vestimentaseden.vestimentas_eden.model.mapper.ClienteMapper;
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
 import com.vestimentaseden.vestimentas_eden.model.pedido.CupomEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
-import com.vestimentaseden.vestimentas_eden.model.pedido.mapper.PedidoMapper;
+import com.vestimentaseden.vestimentas_eden.model.mapper.PedidoMapper;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.response.PedidoResponse;
+import com.vestimentaseden.vestimentas_eden.model.pedido.vo.PedidoVO;
 import com.vestimentaseden.vestimentas_eden.model.produto.vo.ProdutoVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ItemPedidoEntity;
@@ -32,7 +33,7 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
 
-    public PedidoResponse criarPedido(PedidoRequest pedidoRequest, ClienteVO cliente,  List<ProdutoVO> produtoVO) {
+    public PedidoVO criarPedido(PedidoRequest pedidoRequest, ClienteVO cliente,  List<ProdutoVO> produtoVO) {
 
         BigDecimal subtotal = calculoSubTotal(pedidoRequest.getItens(),produtoVO);
 
@@ -59,21 +60,25 @@ public class PedidoService {
 
         pedidoRepository.save(pedido);
 
-       return PedidoMapper.INSTANCE.toPedidoResponse(pedido);
+       return PedidoMapper.INSTANCE.toPedidoVO(pedido);
     }
 
-    public PedidoResponse consultarPedido(String id) {
+    public PedidoVO consultarPedido(String id) {
 
         PedidoEntity pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
-        return PedidoMapper.INSTANCE.toPedidoResponse(pedido);
+        return PedidoMapper.INSTANCE.toPedidoVO(pedido);
     }
 
     public void pagarPedido(String id) {
 
         PedidoEntity pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        if(pedido.getStatus() != StatusPedidoEnum.PAGO)
+            return;
+//        criar excessões para casos assims
 
         pedido.setStatus(StatusPedidoEnum.PAGO);
 

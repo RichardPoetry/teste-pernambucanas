@@ -1,4 +1,4 @@
-package com.vestimentaseden.vestimentas_eden.model.cliente.mapper;
+package com.vestimentaseden.vestimentas_eden.model.mapper;
 
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;

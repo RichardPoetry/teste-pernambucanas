@@ -1,4 +1,4 @@
-package com.vestimentaseden.vestimentas_eden.model.produto.mapper;
+package com.vestimentaseden.vestimentas_eden.model.mapper;
 
 import com.vestimentaseden.vestimentas_eden.model.produto.response.ProdutoResponse;
 import com.vestimentaseden.vestimentas_eden.model.produto.vo.ProdutoVO;

@@ -1,10 +1,10 @@
-package com.vestimentaseden.vestimentas_eden.model.pedido.mapper;
+package com.vestimentaseden.vestimentas_eden.model.mapper;
 
 import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
-import com.vestimentaseden.vestimentas_eden.model.pedido.response.ItemPedidoResponse;
-import com.vestimentaseden.vestimentas_eden.model.pedido.response.PedidoResponse;
+import com.vestimentaseden.vestimentas_eden.model.pedido.vo.ItemPedidoVO;
+import com.vestimentaseden.vestimentas_eden.model.pedido.vo.PedidoVO;
 import com.vestimentaseden.vestimentas_eden.model.produto.vo.ProdutoVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ItemPedidoEntity;
@@ -72,10 +72,10 @@ public interface PedidoMapper {
 
 
 
-    default PedidoResponse toPedidoResponse(PedidoEntity pedidoEntity){
+    default PedidoVO toPedidoVO(PedidoEntity pedidoEntity) {
 
-        List<ItemPedidoResponse> itemPedidoResponse = pedidoEntity.getItens().stream()
-                .map(item -> ItemPedidoResponse.builder()
+        List<ItemPedidoVO> itens = pedidoEntity.getItens().stream()
+                .map(item -> ItemPedidoVO.builder()
                         .id(item.getId())
                         .produtoId(item.getProduto().getId())
                         .quantidade(item.getQuantidade())
@@ -83,15 +83,17 @@ public interface PedidoMapper {
                         .build())
                 .toList();
 
-
-        return PedidoResponse.builder()
+        return PedidoVO.builder()
                 .id(pedidoEntity.getId())
                 .nomeCliente(pedidoEntity.getCliente().getNome())
-                .itens(itemPedidoResponse)
+                .itens(itens)
                 .subtotal(pedidoEntity.getSubtotal())
                 .desconto(pedidoEntity.getDesconto())
                 .frete(pedidoEntity.getFrete())
                 .total(pedidoEntity.getTotal())
+                .pontosGerados(pedidoEntity.getPontosGerados())
+                .cupom(pedidoEntity.getCupom())
+                .status(pedidoEntity.getStatus())
                 .build();
     }
 }

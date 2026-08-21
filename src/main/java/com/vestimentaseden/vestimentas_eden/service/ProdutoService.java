@@ -1,7 +1,8 @@
 package com.vestimentaseden.vestimentas_eden.service;
 
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
-import com.vestimentaseden.vestimentas_eden.model.produto.mapper.ProdutoMapper;
+import com.vestimentaseden.vestimentas_eden.model.mapper.ProdutoMapper;
+import com.vestimentaseden.vestimentas_eden.model.pedido.vo.ItemPedidoVO;
 import com.vestimentaseden.vestimentas_eden.model.produto.response.ProdutoResponse;
 import com.vestimentaseden.vestimentas_eden.model.produto.vo.ProdutoVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ProdutoEntity;
@@ -49,7 +50,7 @@ public class ProdutoService {
         return ProdutoMapper.INSTANCE.toListProdutoVO(produtos);
     }
 
-    public void atualizaEstoque(List<ItemRequest> itens) {
+    public void atualizaEstoquePedidoCriado(List<ItemRequest> itens) {
 
         for (ItemRequest item : itens) {
 
@@ -60,5 +61,19 @@ public class ProdutoService {
             produto.setEstoque(produto.getEstoque() - item.getQuantidade());
         }
         System.out.println("produtos atualizados no estoque");
+    }
+
+
+    public void atualizaEstoquePedidoCancelado(List<ItemPedidoVO> itens) {
+
+        for (ItemPedidoVO item : itens) {
+
+            ProdutoEntity produto = produtoRepository.findById(item.getProdutoId())
+                    .orElseThrow(() -> new RuntimeException(
+                            "Produto não encontrado: " + item.getProdutoId()));
+
+            produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+        }
+        System.out.println("produtos devolvidos ao estoque");
     }
 }

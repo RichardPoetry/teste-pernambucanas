@@ -38,4 +38,10 @@ public class PedidoController {
 
          this.pedidoFacade.pagarPedido(id);
     }
+
+    @PostMapping("/pedido/{id}/pagamento")
+    public void cancelarPedido (@PathVariable String id){
+
+        this.pedidoFacade.cancelarPedido(id);
+    }
 }

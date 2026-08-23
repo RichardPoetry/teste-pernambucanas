@@ -1,0 +1,249 @@
+{
+  "info": {
+    "_postman_id": "b17cd61e-c90b-4e2d-baf8-68d69f2a1aab",
+    "name": "vestimentas-eden",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56351497"
+  },
+  "item": [
+    {
+      "name": "enpoints criados",
+      "item": [
+        {
+          "name": "buscar produtos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "criar pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"clientId\": \"1\",\n    \"itens\": [\n      {\n        \"produtoId\": \"P1\",\n        \"quantidade\": 2\n      },\n      {\n        \"produtoId\": \"P2\",\n        \"quantidade\": 1\n      }\n    ]\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/pedido",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "buscar pedido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "pagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pedido/d42d9318-e38e-4f7e-a74b-a09be364f720/pagamento",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido",
+                "d42d9318-e38e-4f7e-a74b-a09be364f720",
+                "pagamento"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancelamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pedido/12f54847-c44f-4ffe-8941-61c134ef3368/cancelamento",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido",
+                "12f54847-c44f-4ffe-8941-61c134ef3368",
+                "cancelamento"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Casos de uso",
+      "item": [
+        {
+          "name": "caso A-clie/comum s/cupom",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\":\"2\",\n  \"itens\":[\n      {\n         \"produtoId\":\"P1\",\n         \"quantidade\":2\n      },\n      {\n         \"produtoId\":\"P2\",\n         \"quantidade\":1\n      }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/pedido",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Caso B- plus c/cupom",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\":\"1\",\n  \"cupom\":\"FRETEGRATIS\",\n  \"itens\":[\n      {\n         \"produtoId\":\"P3\",\n         \"quantidade\":1\n      }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/pedido",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Caso C- comum c/cupom",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\":\"2\",\n  \"cupom\":\"DESC10\",\n  \"itens\":[\n      {\n         \"produtoId\":\"P1\",\n         \"quantidade\":2\n      }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/pedido",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Caso D - Erro no estoque",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\":\"1\",\n  \"itens\":[\n      {\n         \"produtoId\":\"P3\",\n         \"quantidade\":3\n      }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/pedido",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pedido"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

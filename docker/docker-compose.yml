@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+
+  postgres:
+
+    image: postgres:17
+
+    container_name: vestimentas-postgres
+
+    restart: always
+
+    environment:
+      POSTGRES_DB: vestimentas_db
+      POSTGRES_USER: vestimentas_user
+      POSTGRES_PASSWORD: eden_password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vestimentas_user -d vestimentas_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  vestimentas-api:
+
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: vestimentas-api
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+
+      BMS_DATABASE_URL: jdbc:postgresql://postgres:5432/vestimentas_db
+
+      BMS_DATABASE_USERNAME: vestimentas_user
+
+      BMS_DATABASE_PASSWORD: eden_password
+
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

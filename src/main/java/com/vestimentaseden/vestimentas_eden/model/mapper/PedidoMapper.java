@@ -1,5 +1,6 @@
 package com.vestimentaseden.vestimentas_eden.model.mapper;
 
+import com.vestimentaseden.vestimentas_eden.exception.error.ProdutoNotFoundException;
 import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
@@ -52,7 +53,8 @@ public interface PedidoMapper {
                     .filter(p -> p.getId().equals(item.getProdutoId()))
                     .findFirst()
                     .orElseThrow(() ->
-                            new RuntimeException("Produto não encontrado: " + item.getProdutoId()));
+                            new ProdutoNotFoundException(item.getProdutoId())
+                    );
 
             ProdutoEntity produtoEntity = ProdutoEntity.builder()
                     .id(produto.getId())

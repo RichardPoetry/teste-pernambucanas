@@ -19,6 +19,7 @@ public class ItemRequest {
     private String produtoId;
 
     @Positive(message = "A quantidade de produto deve ser maior que zero")
+    @NotNull(message ="voce precisa informar a quantidade do produto")
     private Integer quantidade;
 
 }

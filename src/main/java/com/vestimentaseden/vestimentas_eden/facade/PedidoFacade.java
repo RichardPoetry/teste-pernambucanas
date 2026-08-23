@@ -1,8 +1,8 @@
 package com.vestimentaseden.vestimentas_eden.facade;
 
+import com.vestimentaseden.vestimentas_eden.exception.error.PedidoNaocanceladoException;
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
 import com.vestimentaseden.vestimentas_eden.model.mapper.ResponseMapper;
-import com.vestimentaseden.vestimentas_eden.model.pedido.StatusPedidoEnum;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.PedidoRequest;
 import com.vestimentaseden.vestimentas_eden.model.pedido.response.PedidoResponse;
 import com.vestimentaseden.vestimentas_eden.model.pedido.vo.PedidoVO;
@@ -52,15 +52,11 @@ public class PedidoFacade {
 
         PedidoVO pedidoVO = pedidoService.consultarPedido(id);
 
-        if(pedidoVO.getStatus() == StatusPedidoEnum.ENVIADO ||
-           pedidoVO.getStatus() == StatusPedidoEnum.ENTREGUE) {
-            System.out.println("pedido não pode ser cancelado");
-            return;
-        }
+        this.pedidoService.AtualizarStatusPedidoCancelado(id);
 
         this.produtoService.atualizaEstoquePedidoCancelado(pedidoVO.getItens());
 
-        this.pedidoService.AtualizarStatusPedidoCancelado(id);
+
 
     }
 }

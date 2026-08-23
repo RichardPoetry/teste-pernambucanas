@@ -1,5 +1,7 @@
 package com.vestimentaseden.vestimentas_eden.service;
 
+import com.vestimentaseden.vestimentas_eden.exception.error.EstoqueInsuficienteException;
+import com.vestimentaseden.vestimentas_eden.exception.error.ProdutoNotFoundException;
 import com.vestimentaseden.vestimentas_eden.model.pedido.request.ItemRequest;
 import com.vestimentaseden.vestimentas_eden.model.mapper.ProdutoMapper;
 import com.vestimentaseden.vestimentas_eden.model.pedido.vo.ItemPedidoVO;
@@ -11,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -36,14 +37,15 @@ public class ProdutoService {
         for (ItemRequest item : itens) {
 
             ProdutoEntity produto = produtoRepository.findById(item.getProdutoId())
-                    .orElseThrow(() -> new RuntimeException(
-                            "Produto não encontrado: " + item.getProdutoId()));
+                    .orElseThrow(() -> new ProdutoNotFoundException(item.getProdutoId()));
 
             if (produto.getEstoque() < item.getQuantidade()) {
-                throw new RuntimeException(
-                        "Estoque insuficiente para o produto " + produto.getNome());
+                throw new EstoqueInsuficienteException(
+                        produto.getNome(),
+                        produto.getEstoque(),
+                        item.getQuantidade()
+                );
             }
-
             produtos.add(produto);
         }
 
@@ -55,8 +57,7 @@ public class ProdutoService {
         for (ItemRequest item : itens) {
 
             ProdutoEntity produto = produtoRepository.findById(item.getProdutoId())
-                    .orElseThrow(() -> new RuntimeException(
-                            "Produto não encontrado: " + item.getProdutoId()));
+                    .orElseThrow(() -> new ProdutoNotFoundException(item.getProdutoId()));
 
             produto.setEstoque(produto.getEstoque() - item.getQuantidade());
             produtoRepository.save(produto);
@@ -70,10 +71,9 @@ public class ProdutoService {
         for (ItemPedidoVO item : itens) {
 
             ProdutoEntity produto = produtoRepository.findById(item.getProdutoId())
-                    .orElseThrow(() -> new RuntimeException(
-                            "Produto não encontrado: " + item.getProdutoId()));
+                    .orElseThrow(() -> new ProdutoNotFoundException(item.getProdutoId()));
 
-            produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+            produto.setEstoque(produto.getEstoque() + item.getQuantidade());
             produtoRepository.save(produto);
         }
         System.out.println("produtos devolvidos ao estoque");

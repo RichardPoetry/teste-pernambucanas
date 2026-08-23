@@ -1,5 +1,9 @@
 package com.vestimentaseden.vestimentas_eden.service;
 
+import com.vestimentaseden.vestimentas_eden.exception.error.PedidoInvalidoException;
+import com.vestimentaseden.vestimentas_eden.exception.error.PedidoNaocanceladoException;
+import com.vestimentaseden.vestimentas_eden.exception.error.PedidoNotFoundException;
+import com.vestimentaseden.vestimentas_eden.exception.error.ProdutoNotFoundException;
 import com.vestimentaseden.vestimentas_eden.model.cliente.TipoClienteEnum;
 import com.vestimentaseden.vestimentas_eden.model.mapper.ClienteMapper;
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
@@ -25,6 +29,7 @@ import java.util.List;
 import static com.vestimentaseden.vestimentas_eden.ApplicationConstants.DESCONTO_CLIENTE_PLUS;
 import static com.vestimentaseden.vestimentas_eden.ApplicationConstants.DESCONTO_CUPOM_DESC10;
 import static com.vestimentaseden.vestimentas_eden.ApplicationConstants.FRETE;
+import static com.vestimentaseden.vestimentas_eden.ApplicationConstants.MENSAGEM_ERRO_CALCULO_TOTAL;
 import static com.vestimentaseden.vestimentas_eden.ApplicationConstants.VALOR_MINIMO_FRETE_GRATIS;
 
 @Service
@@ -66,7 +71,7 @@ public class PedidoService {
     public PedidoVO consultarPedido(String id) {
 
         PedidoEntity pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+                .orElseThrow(() -> new PedidoNotFoundException(id));
 
         return PedidoMapper.INSTANCE.toPedidoVO(pedido);
     }
@@ -74,13 +79,16 @@ public class PedidoService {
     public void pagarPedido(String id) {
 
         PedidoEntity pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+                .orElseThrow(() -> new PedidoNotFoundException(id));
+
+        if(pedido.getStatus() != StatusPedidoEnum.CRIADO)
 
         pedido.setStatus(StatusPedidoEnum.PAGO);
 
        int pontosGerados = pedido.getTotal().intValue();
 
-       if(pedido.getCliente().getTipo() == TipoClienteEnum.PLUS) pedido.setPontosGerados(pontosGerados * 2);
+       if(pedido.getCliente().getTipo() == TipoClienteEnum.PLUS)
+           pedido.setPontosGerados(pontosGerados * 2);
 
        pedido.setPontosGerados(pontosGerados);
 
@@ -90,7 +98,12 @@ public class PedidoService {
     public void AtualizarStatusPedidoCancelado(String id) {
 
         PedidoEntity pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+                .orElseThrow(() -> new PedidoNotFoundException(id));
+
+        if(pedido.getStatus() == StatusPedidoEnum.ENVIADO ||
+           pedido.getStatus() == StatusPedidoEnum.ENTREGUE) {
+            throw new PedidoNaocanceladoException(pedido.getStatus());
+        }
 
         pedido.setStatus(StatusPedidoEnum.CANCELADO);
 
@@ -107,7 +120,7 @@ public class PedidoService {
                     .filter(p -> p.getId().equals(item.getProdutoId()))
                     .findFirst()
                     .orElseThrow(() ->
-                            new RuntimeException("Produto não encontrado: " + item.getProdutoId()));
+                            new ProdutoNotFoundException(item.getProdutoId()));
 
             BigDecimal valorItem = produto.getPreco()
                     .multiply(BigDecimal.valueOf(item.getQuantidade()));
@@ -151,12 +164,9 @@ public class PedidoService {
                 .add(frete);
 
         if (total.compareTo(BigDecimal.ZERO) < 0) {
-            return BigDecimal.ZERO.setScale(2);
-//            gerar excessão
+              throw new PedidoInvalidoException(MENSAGEM_ERRO_CALCULO_TOTAL);
         }
-
         return total;
     }
-
 
 }

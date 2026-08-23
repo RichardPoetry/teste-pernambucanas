@@ -1,5 +1,6 @@
 package com.vestimentaseden.vestimentas_eden.service;
 
+import com.vestimentaseden.vestimentas_eden.exception.error.ClienteNotFoundException;
 import com.vestimentaseden.vestimentas_eden.model.mapper.ClienteMapper;
 import com.vestimentaseden.vestimentas_eden.model.cliente.vo.ClienteVO;
 import com.vestimentaseden.vestimentas_eden.persistence.entity.ClienteEntity;
@@ -16,9 +17,7 @@ public class ClienteService {
     public ClienteVO buscarCliente(String clienteId) {
 
         ClienteEntity clienteEntity = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new RuntimeException(
-                        "Cliente não encontrado: " + clienteId
-                ));
+                .orElseThrow(() -> new ClienteNotFoundException(clienteId));
 
         return ClienteMapper.INSTANCE.toClienteVO(clienteEntity);
     }

@@ -22,7 +22,6 @@ public class PedidoController {
     @PostMapping("/pedido")
     public PedidoResponse criarPedido (@RequestBody @Valid PedidoRequest pedidoRequest){
 
-        System.out.println(pedidoRequest);
 
         return this.pedidoFacade.criarPedido(pedidoRequest);
     }

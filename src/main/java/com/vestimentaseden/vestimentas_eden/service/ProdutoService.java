@@ -62,7 +62,6 @@ public class ProdutoService {
             produto.setEstoque(produto.getEstoque() - item.getQuantidade());
             produtoRepository.save(produto);
         }
-        System.out.println("produtos atualizados no estoque");
     }
 
 
@@ -76,6 +75,5 @@ public class ProdutoService {
             produto.setEstoque(produto.getEstoque() + item.getQuantidade());
             produtoRepository.save(produto);
         }
-        System.out.println("produtos devolvidos ao estoque");
     }
 }

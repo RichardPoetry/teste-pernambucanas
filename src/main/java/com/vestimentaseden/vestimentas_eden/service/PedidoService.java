@@ -81,16 +81,17 @@ public class PedidoService {
         PedidoEntity pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new PedidoNotFoundException(id));
 
-        if(pedido.getStatus() != StatusPedidoEnum.CRIADO)
+        if(pedido.getStatus() == StatusPedidoEnum.CRIADO){
 
+            int pontosGerados = pedido.getTotal().intValue();
+
+            if(pedido.getCliente().getTipo() == TipoClienteEnum.PLUS) {
+                pedido.setPontosGerados(pontosGerados * 2);
+            }else {
+                pedido.setPontosGerados(pontosGerados);
+            }
+        }
         pedido.setStatus(StatusPedidoEnum.PAGO);
-
-       int pontosGerados = pedido.getTotal().intValue();
-
-       if(pedido.getCliente().getTipo() == TipoClienteEnum.PLUS)
-           pedido.setPontosGerados(pontosGerados * 2);
-
-       pedido.setPontosGerados(pontosGerados);
 
        pedidoRepository.save(pedido);
     }

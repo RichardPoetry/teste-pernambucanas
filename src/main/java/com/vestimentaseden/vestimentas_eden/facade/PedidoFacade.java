@@ -26,7 +26,6 @@ public class PedidoFacade {
     public PedidoResponse criarPedido(PedidoRequest pedidoRequest) {
 
         List<ProdutoVO> produtoVOS = produtoService.verificarItemEstoque(pedidoRequest.getItens());
-        System.out.println("todos itens contém no estoque");
 
         ClienteVO cliente = clienteService.buscarCliente(pedidoRequest.getClientId());
 
